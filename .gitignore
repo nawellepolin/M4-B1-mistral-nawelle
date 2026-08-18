@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Données : le CSV d'entrée est versionné dans le template (livré au clone) ;
+# les sorties (modèles) restent hors commit.
+data/*.csv
+!data/.gitkeep
+!data/bike_sharing.csv
+
+# Modèles produits
+models/*.joblib
+models/*.json
+!models/.gitkeep
