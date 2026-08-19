@@ -11,10 +11,9 @@ des paramètres** (ex. `StandardScaler`) doit donc vivre DANS la factory du
 modèle (`make_pipeline(StandardScaler(), estimator)`), jamais être appliqué à
 `X` en amont — sinon le scaler « voit » le fold de test (fuite de données).
 
-À compléter :
-- TODO 1 : import + définir 3 modèles à benchmarker (3 familles différentes) ;
-  pour le linéaire, encapsuler le scaler via `make_pipeline` (anti-fuite)
-- TODO 2 : choix `KFold` vs `TimeSeriesSplit` (justifie dans le notebook)
+Les 3 familles de modèles (factories) et le choix du splitter
+(`TimeSeriesSplit`, justifié en section 3) sont définis dans le notebook
+(section 4) et passés à `run_benchmark` ci-dessous.
 """
 from __future__ import annotations
 
@@ -26,13 +25,6 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, r2_score, root_mean_squared_error
-
-# TODO 1 — Imports des 3+ modèles
-# from sklearn.linear_model import Ridge
-# from sklearn.ensemble import RandomForestRegressor, HistGradientBoostingRegressor
-
-# TODO 2 — Choix du splitter (justifie en notebook)
-# from sklearn.model_selection import KFold, TimeSeriesSplit
 
 
 @dataclass

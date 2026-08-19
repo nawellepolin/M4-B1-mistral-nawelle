@@ -14,9 +14,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# TODO — Sélectionne tes features (exclure les fuites !)
 FEATURES: list[str] = [
-    # ex. "season", "year", "month", "hour", ...
+    "season", "year", "month", "hour", "is_holiday", "weekday",
+    "is_working_day", "weather", "temperature_norm",
+    "humidity_norm", "windspeed_norm",
 ]
 TARGET: str = "total_rentals"
 
@@ -29,6 +30,14 @@ def load_dataset(path: Path) -> tuple[pd.DataFrame, pd.Series]:
 
     Returns:
         (X, y) avec X = features sélectionnées, y = total_rentals.
+        `season` est OneHot-encodée (catégorielle, sans ordre naturel) ;
+        `weather` reste numérique (sa sévérité 1->4, clair->orage, est
+        déjà ordonnée, donc exploitable telle quelle même en linéaire).
+        `month`/`hour` restent ici numériques brutes (pas d'OneHot, pas
+        d'ordinal artificiel) : elles ont un vrai ordre cyclique (déc. proche
+        de janv., 23h proche de 0h) qu'un OneHot détruirait. Utiliser
+        `add_cyclic_features()` pour les convertir en sin/cos si besoin
+        (recommandé en linéaire ; inutile pour arbres/boosting).
     """
     df = pd.read_csv(path)
     missing = [c for c in FEATURES + [TARGET] if c not in df.columns]
@@ -36,6 +45,7 @@ def load_dataset(path: Path) -> tuple[pd.DataFrame, pd.Series]:
         raise KeyError(f"Colonnes attendues absentes : {missing}")
     y = df[TARGET]
     X = df[FEATURES].copy()
+    X = pd.get_dummies(X, columns=["season"], prefix="season")
     return X, y
 
 
